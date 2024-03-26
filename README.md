@@ -13,10 +13,20 @@
 ```sh
 pip install -r requirements.txt
 ```
+### Config file
+
+Needs a config.yml file with this paremeters:
+```sh
+cred_path: "path_to_firebase_admin_credentials_file"
+pyrebase_config_path: "path_to_pyrebase_configuration_file"
+port: 5000
+jwt_secret_key: "your_jwt_secret_key"
+```
+
 
 #### Building 
 
 ```sh
-python entrypoint.py --cred_path "C:/path/to/your/credentials.json" --pyrebase_config_path "C:/path/to/your/firebaseConfig.json" --port 8000
+python entrypoint.py
 ```
 Default port is 5000
