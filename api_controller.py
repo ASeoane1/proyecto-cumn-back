@@ -22,6 +22,8 @@ class ApiController:
         self.app.add_url_rule('/documents/add_user_document', 'add_user_document', self.add_user_document, methods=['POST'])
         self.app.add_url_rule('/documents/get_document', 'get_document', self.get_document, methods=['POST'])
         self.app.add_url_rule('/documents/create_update_document', 'create_update_document', self.create_update_document, methods=['POST'])
+        self.app.add_url_rule('/documents/delete_user_document', 'delete_user_document', self.delete_user_document, methods=['DELETE'])
+
 
     def register_user(self):
         data = request.json
@@ -121,10 +123,11 @@ class ApiController:
 
         #Create or update document
         document_name = data.get('document_name')
-        if not user or not document_name:
-            return jsonify({'error': 'User or document_name missing'}), 400
+        document_data = data.get('data')
+        if not user or not document_name or not document_data:
+            return jsonify({'error': 'User, document_name or document_data missing'}), 400
         
-        response, status_code = self.firestore_db.create_update_document(user, document_name, data)
+        response, status_code = self.firestore_db.create_update_document(user, document_name, document_data)
         return jsonify(response), status_code
     
     def add_user_document(self):
@@ -152,7 +155,35 @@ class ApiController:
         if not user or not document_name:
             return jsonify({'error': 'User or document_name missing'}), 400
         
-        response, status_code = self.firestore_db.add_user_document(user, document_name, data)
+        response, status_code = self.firestore_db.add_user_document(user, document_name)
+        return jsonify(response), status_code
+    
+    def delete_user_document(self):
+        #Validate token
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'error': 'Authorization token missing'}), 401
+
+        decoded_username, valid = self.jwt_admin.decode_token(token)
+        if not decoded_username:
+            return jsonify({'error': 'Invalid token'}), 401
+        if not valid:
+            if decoded_username == 'expired':
+                return jsonify({'error': 'Token expired'}), 403
+            elif decoded_username == 'invalid':
+                return jsonify({'error': 'Unauthorized access'}), 403
+
+        data = request.json
+        user = data.get('user')
+        if user != decoded_username:
+            return jsonify({'error': 'Unauthorized access'}), 403
+        
+        #Add user document
+        document_name = data.get('document_name')
+        if not user or not document_name:
+            return jsonify({'error': 'User or document_name missing'}), 400
+        
+        response, status_code = self.firestore_db.delete_user_document(user, document_name)
         return jsonify(response), status_code
 
     def start_server(self, port=5000):
