@@ -5,6 +5,7 @@
 
 - API integration for Google Firebase sign up via email & passsword
 - API integration for Google Firebase login via email & passsword
+- API integration with Google Firebase Firestore for logged in users
 
 
 ## Installation
@@ -27,6 +28,6 @@ jwt_secret_key: "your_jwt_secret_key"
 #### Building 
 
 ```sh
-python entrypoint.py
+python entrypoint.py "config.yml path"
 ```
 Default port is 5000
