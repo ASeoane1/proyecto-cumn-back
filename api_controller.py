@@ -190,7 +190,7 @@ class ApiController:
     def start_server(self, port=5000):
         if port is 0:
             #Run on cloud
-            port = int(os.environ.get("PORT", 5000))
+            port = int(os.environ.get("PORT", 8080))
             self.app.run(debug=True, port=port, host="0.0.0.0")
         else:
             #Run locally

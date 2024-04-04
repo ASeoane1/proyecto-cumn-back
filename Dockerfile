@@ -6,6 +6,8 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+COPY config.yml ./
+
 COPY *.py ./
 
 COPY prod_keys/computacionubicuaalvaroseoane-firebase-adminsdk-bvofg-c0f4c62bb0.json prod_keys/firebaseConfig.json ./
@@ -13,5 +15,6 @@ COPY prod_keys/computacionubicuaalvaroseoane-firebase-adminsdk-bvofg-c0f4c62bb0.
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "entrypoint:app", "config.yml"]
+EXPOSE 8080
 
+CMD ["python", "entrypoint.py", "config.yml"]
