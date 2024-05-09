@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from api_logic import ApiLogic
 from firebase_auth import FirebaseAuth
@@ -187,4 +188,11 @@ class ApiController:
         return jsonify(response), status_code
 
     def start_server(self, port=5000):
-        self.app.run(debug=True, port=port)
+        if port is 0:
+            #Run on cloud
+            port = int(os.environ.get("PORT", 8080))
+            self.app.run(debug=True, port=port, host="0.0.0.0")
+        else:
+            #Run locally
+            self.app.run(debug=True, port=port)
+

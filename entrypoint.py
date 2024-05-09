@@ -1,3 +1,4 @@
+import argparse
 import yaml
 from api_controller import ApiController
 
@@ -7,7 +8,11 @@ def load_config(config_file):
     return config
 
 if __name__ == '__main__':
-    config = load_config('config.yml')
+    parser = argparse.ArgumentParser(description='Start the API server.')
+    parser.add_argument('config_file', type=str, help='Path to the configuration file')
+    args = parser.parse_args()
+
+    config = load_config(args.config_file)
 
     # Initialize API
     api_controller = ApiController(
