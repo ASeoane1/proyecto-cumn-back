@@ -65,7 +65,7 @@ class FirebaseFirestore:
                 if document_name in user_documents:
                     document = self.db.collection('collection').document(user + '_' + document_name).get()
                     if document.exists:
-                        return document.to_dict(), 200
+                        return {"response":document.to_dict()}, 200
                     else:
                         return {} , 201
                 else:

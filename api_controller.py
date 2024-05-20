@@ -23,7 +23,7 @@ class ApiController:
         self.app.add_url_rule('/documents/add_user_document', 'add_user_document', self.add_user_document, methods=['POST'])
         self.app.add_url_rule('/documents/get_document', 'get_document', self.get_document, methods=['POST'])
         self.app.add_url_rule('/documents/create_update_document', 'create_update_document', self.create_update_document, methods=['POST'])
-        self.app.add_url_rule('/documents/delete_user_document', 'delete_user_document', self.delete_user_document, methods=['DELETE'])
+        self.app.add_url_rule('/documents/delete_user_document', 'delete_user_document', self.delete_user_document, methods=['POST'])
 
 
     def register_user(self):
